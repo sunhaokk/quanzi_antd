@@ -17,6 +17,14 @@
 
 ### 注意
 
-- 安装使用Yarn
+- 安装使用 Yarn
  
-- 环境node必须大于8.0
+- 环境node必须大于 8.0
+
+### 说明
+
+Roadhog 是一个包含 dev、build 和 test 的命令行工具，他基于 react-dev-utils，和 create-react-app 的体验保持一致。你可以想象他为可配置版的 create-react-app。
+
+roadhog 的 webpack 部分功能是基于 af-webpack 实现的 。而 af-webpack 是支付宝团队封装的 webpack。
+
+所以 webpack 方面，我们只需要按文档配置 roadhog
