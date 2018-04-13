@@ -32,8 +32,8 @@ roadhog 的 webpack 部分功能是基于 af-webpack 实现的 。而 af-webpack
 
 ### 教程
 
-首先要明白 browserHistory 和 hashHistory 。还有理解前后端分离。[eact-router教程](https://react-guide.github.io/react-router-cn/]。
-[react-router4注意教程(https://www.jianshu.com/p/6a45e2dfc9d9)
+首先要明白 browserHistory 和 hashHistory 。还有理解前后端分离。[react-router教程](https://react-guide.github.io/react-router-cn/])。
+[react-router4注意教程](https://www.jianshu.com/p/6a45e2dfc9d9)
 [react-router4坑](http://www.sohu.com/a/191444164_115128)
 
 [我们先从路由和布局和菜单开始学习](https://pro.ant.design/docs/router-and-nav-cn)
