@@ -30,7 +30,7 @@ roadhog 的 webpack 部分功能是基于 af-webpack 实现的 。而 af-webpack
 
 所以 webpack 方面，我们只需要按文档配置 roadhog
 
-### 教程
+### 路由和布局教程
 
 首先要明白 browserHistory 和 hashHistory 。还有理解前后端分离。[react-router教程](https://react-guide.github.io/react-router-cn/])。
 [react-router4注意教程](https://www.jianshu.com/p/6a45e2dfc9d9)
@@ -263,11 +263,12 @@ const menuData = getFlatMenuData(getMenuData());
 
 在路由表新建路由 =》 在菜单表新建菜单  完毕。很简单
 
-- 新建页面
 
-实际上 默认我们只有两个页面布局。 即一个用户登录 和 一个系统管理。 其余看到的变化都是通过 路由加载组件进行切换的。
+- 新建布局
 
-如果需要新建页面。如例子。在layout新建了一个NewLayout添加了一个新的布局，在路由上添加了两个新的组件。
+实际上 默认我们只有两个页面布局。 即一个用户登录 和 一个系统管理。 其余看到的变化都是通过 路由加载 对应页面内组件进行切换的。
+
+如果需要新建布局。如例子。在layout新建了一个NewLayout添加了一个新的布局，在路由上添加了两个新的组件。
 
 然后在菜单上添加所对应的路径。最后在 src/router.js 根路由上添加即可
 
@@ -335,6 +336,90 @@ const menuData = [{
   <Route path="/user" component={UserLayout} />
   <Route path=":base" component={UserLayout} />
  ```
+
+### 新建页面和组件教程
+
+  在 src/routes 这里都是我们路由绑定的页面  默认对应页面都有相应的 less 文件， 使用 css module 绑定 less 的style。
+
+  可以在src/components 写组件。组件就是一些固定的  静态 可以复用的页面。
+
+  对于页面中的 less  这里注意两点 src/utils/utils.less 放工具覆盖原有样式用以下写法。
+
+  ```
+  // TestPage.less
+  .customSelect {
+    :global {
+      .ant-select-selection {
+        max-height: 51px;
+        overflow: auto;
+      }
+    }
+  }
+  ```
+
+### 交互
+
+在真正写业务之前，务必  弄明白dva数据流 和 知识要点，重点是 model。为了加深印象 要和 redux 对比学习。
+
+[dva 知识点](https://github.com/dvajs/dva-knowledgemap#react-component)
+
+![dva数据流](https://camo.githubusercontent.com/c826ff066ed438e2689154e81ff5961ab0b9befe/68747470733a2f2f7a6f732e616c697061796f626a656374732e636f6d2f726d73706f7274616c2f505072657245414b62496f445a59722e706e67)
+
+```
+app.model({
+  namespace: 'todo',
+  state: [],
+  reducers: {
+    add(state, { payload: todo }) {
+      // 保存数据到 state
+      return [...state, todo];
+    },
+  },
+  effects: {
+    *save({ payload: todo }, { put, call }) {
+      // 调用 saveTodoToServer，成功后触发 `add` action 保存到 state
+      yield call(saveTodoToServer, todo);
+      yield put({ type: 'add', payload: todo });
+    },
+  },
+  subscriptions: {
+    setup({ history, dispatch }) {
+      // 监听 history 变化，当进入 `/` 时触发 `load` action
+      return history.listen(({ pathname }) => {
+        if (pathname === '/') {
+          dispatch({ type: 'load' });
+        }
+      });
+    },
+  },
+});
+```
+
+
+https://github.com/dvajs/dva-knowledgemap#react-component
+
+在 Ant Design Pro 中，一个完整的前端 UI 交互到服务端处理流程是这样的：
+
+UI 组件交互操作；
+
+1. 调用 model 的 effect；
+
+2. 调用统一管理的 service 请求函数；
+
+3. 使用封装的 request.js 发送请求；
+
+4. 获取服务端返回；
+
+5. 然后调用 reducer 改变 state；
+
+6. 更新 model。
+
+我们可以看到  一个完整的交互  
+
+通过 dispath 出发 model effect 通过service 的requset请求获取数据， 调用reducer改变state。model更新
+
+
+
 
 
 
