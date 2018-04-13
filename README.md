@@ -32,11 +32,11 @@ roadhog 的 webpack 部分功能是基于 af-webpack 实现的 。而 af-webpack
 
 ### 教程
 
-首先要明白 browserHistory 和 hashHistory 。还有理解前后端分离。(react-router教程)[https://react-guide.github.io/react-router-cn/]。
-(react-router4注意教程)[https://www.jianshu.com/p/6a45e2dfc9d9]
-(react-router4坑)[http://www.sohu.com/a/191444164_115128]
+首先要明白 browserHistory 和 hashHistory 。还有理解前后端分离。[eact-router教程](https://react-guide.github.io/react-router-cn/]。
+[react-router4注意教程(https://www.jianshu.com/p/6a45e2dfc9d9)
+[react-router4坑](http://www.sohu.com/a/191444164_115128)
 
-(我们先从路由和布局和菜单开始学习)[https://pro.ant.design/docs/router-and-nav-cn]
+[我们先从路由和布局和菜单开始学习](https://pro.ant.design/docs/router-and-nav-cn)
 
 - 先进 src/common/router.js
 
@@ -209,7 +209,7 @@ Object.keys(routerConfig).forEach(path => {
 const menuKey = Object.keys(menuData).find(key => pathRegexp.test(`${key}`));
 
 ```
-通过 Object.keys(routerConfig) 遍历路由表返回所有的对象名(其实对象名就是 path)。然后把 path 传入函数体内。 通过 Object.keys(menuData) 一个包含所有 菜单树的所有菜单名，然后通过 （find)[https://blog.csdn.net/qq_30100043/article/details/53303768] 遍历数组 返回 (pathRegexp)[https://www.npmjs.com/package/path-to-regexp]测试包裹的 path.
+通过 Object.keys(routerConfig) 遍历路由表返回所有的对象名(其实对象名就是 path)。然后把 path 传入函数体内。 通过 Object.keys(menuData) 一个包含所有 菜单树的所有菜单名，然后通过 [find](https://blog.csdn.net/qq_30100043/article/details/53303768) 遍历数组 返回 [pathRegexp](https://www.npmjs.com/package/path-to-regexp)测试包裹的 path.
 
 
 ```
