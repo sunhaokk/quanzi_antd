@@ -2,6 +2,7 @@
 
 ### 框架首页
 
+
 [antd首页](https://ant.design/docs/react/introduce-cn)
 
 [antp首页](https://pro.ant.design/docs/getting-started-cn)
@@ -12,7 +13,7 @@
 
 [roadhug文档](https://github.com/sorrycc/roadhog/blob/master/README_zh-cn.md)
 
-[react-router](https://reacttraining.com/react-router/web/example/basic)
+[react-router](http://reacttraining.cn/web/guides/quick-start) 
 
 
 ### 注意
@@ -30,6 +31,12 @@ roadhog 的 webpack 部分功能是基于 af-webpack 实现的 。而 af-webpack
 所以 webpack 方面，我们只需要按文档配置 roadhog
 
 ### 教程
+
+首先要明白 browserHistory 和 hashHistory 。还有理解前后端分离。(react-router教程)[https://react-guide.github.io/react-router-cn/]。
+(react-router4注意教程)[https://www.jianshu.com/p/6a45e2dfc9d9]
+(react-router4坑)[http://www.sohu.com/a/191444164_115128]
+
+(我们先从路由和布局和菜单开始学习)[https://pro.ant.design/docs/router-and-nav-cn]
 
 - 先进 src/common/router.js
 
@@ -248,7 +255,7 @@ const menuData = getFlatMenuData(getMenuData());
     routerData[path] = router;
 ```
 
-总结: 如果我们要添加新的 模块 **首先要卸载路由表上** 。也可以写在菜单表上。 如果重复  优先使用路由表上的配置。
+总结: 如果我们要添加新的 模块 **首先要写在路由表上** 。也可以写在菜单表上。 如果重复  优先使用路由表上的配置。
 
 即 如果你要添加个菜单  路由表上的 对象名 一定要和 菜单里的 path 相对应。
 
@@ -256,7 +263,78 @@ const menuData = getFlatMenuData(getMenuData());
 
 在路由表新建路由 =》 在菜单表新建菜单  完毕。很简单
 
+- 新建页面
 
+实际上 默认我们只有两个页面布局。 即一个用户登录 和 一个系统管理。 其余看到的变化都是通过 路由加载组件进行切换的。
+
+如果需要新建页面。如例子。在layout新建了一个NewLayout添加了一个新的布局，在路由上添加了两个新的组件。
+
+然后在菜单上添加所对应的路径。最后在 src/router.js 根路由上添加即可
+
+```
+/ src/common/router.js
+'/new': {
+  component: dynamicWrapper(app, ['monitor'], () => import('../layouts/NewLayout')),
+},
+'/new/page1': {
+  component: dynamicWrapper(app, ['monitor'], () => import('../routes/New/Page1')),
+},
+'/new/page2': {
+  component: dynamicWrapper(app, ['monitor'], () => import('../routes/New/Page2')),
+},
+// src/common/menu.js
+const menuData = [{
+  name: '新布局',
+  icon: 'table',
+  path: 'new',
+  children: [{
+    name: '页面一',
+    path: 'page1',
+  }, {
+    name: '页面二',
+    path: 'page2',
+  }],
+}, {
+  // 更多配置
+}];
+// src/router.js
+<Router history={history}>
+  <Switch>
+    <Route path="/new" render={props => <NewLayout {...props} />} />
+    <Route path="/user" render={props => <UserLayout {...props} />} />
+    <Route path="/" render={props => <BasicLayout {...props} />} />
+  </Switch>
+</Router>
+```
+
+
+
+我们分析下根路由
+
+```
+<LocaleProvider locale={zhCN}>
+      <ConnectedRouter history={history}>
+        <Switch>
+          <Route path="/user" component={UserLayout} />
+          <AuthorizedRoute
+            path="/"
+            render={props => <BasicLayout {...props} />}
+            authority={['admin', 'user']}
+            redirectPath="/user/login"
+          />
+        </Switch>
+      </ConnectedRouter>
+    </LocaleProvider>
+ ```
+ 
+ 其中 LocaleProvider 是 antd 本地化的封装  这里选择的是中文。这里为什么要用 ConnectedRouter 。 这是因为react-router4的拆分。路由与 redux关联 ConnectedRouter 进行绑定。这样在redux 才可以用路由。  最后Switch 对匹配的多条路由 优先选择第一个。为什么优先选择呢？
+ 
+ 例如，下面的两条路由匹配的是同时发生的。所以加上 switch  可以 优选第一条路由 /user
+ 
+ ```
+  <Route path="/user" component={UserLayout} />
+  <Route path=":base" component={UserLayout} />
+ ```
 
 
 
